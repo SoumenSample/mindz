@@ -1,0 +1,50 @@
+.admin-footer {
+  min-height: 65px;
+
+  background: #ffffff;
+
+  border-top: 1px solid #e7e9ee;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 18px 28px;
+
+  color: #8592a3;
+
+  font-size: 12px;
+
+  margin-top: 25px;
+}
+
+.footer-links {
+  display: flex;
+
+  gap: 20px;
+}
+
+.footer-links a {
+  color: #697a8d;
+
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  color: #696cff;
+}
+
+@media (max-width: 576px) {
+
+  .admin-footer {
+    flex-direction: column;
+
+    gap: 10px;
+
+    text-align: center;
+
+    padding: 15px;
+  }
+
+}

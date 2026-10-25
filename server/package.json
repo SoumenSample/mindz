@@ -1,0 +1,27 @@
+{
+  "name": "customer-master-backend",
+  "version": "1.0.0",
+  "description": "Backend API for Customer Master Module using Node.js, Express, and MySQL2",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^16.6.1",
+    "exceljs": "^4.4.0",
+    "express": "^4.22.3",
+    "jsonwebtoken": "^9.0.3",
+    "multer": "^2.4.0",
+    "mysql2": "^3.24.5",
+    "pdfjs-dist": "^2.16.105",
+    "pdfkit": "^0.17.2",
+    "sharp": "^0.35.5",
+    "tesseract.js": "^7.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}

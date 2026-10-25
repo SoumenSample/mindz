@@ -1,0 +1,663 @@
+/* Custom UI Enhancements for Customer Master Module */
+
+body {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  color: #1e293b;
+  background-color: #f8fafc !important;
+}
+
+/* Header styling */
+.navbar-brand {
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+/* Glassmorphic & Modern Cards */
+.card {
+  border-radius: 12px;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease-in-out;
+}
+
+.card-header {
+  border-top-left-radius: 12px !important;
+  border-top-right-radius: 12px !important;
+  font-weight: 600;
+}
+
+/* Form Controls */
+.form-control:focus, .form-select:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+}
+
+.form-label {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #475569;
+  margin-bottom: 0.35rem;
+}
+
+.text-danger-small {
+  font-size: 0.8rem;
+  color: #ef4444;
+  margin-top: 0.25rem;
+}
+
+/* Table Design */
+.table {
+  vertical-align: middle;
+}
+
+.table th {
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #64748b;
+  background-color: #f1f5f9;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.table hover tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+/* Action Buttons */
+.btn-action {
+  padding: 0.35rem 0.65rem;
+  font-size: 0.85rem;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-weight: 500;
+}
+
+/* Badge styling */
+.badge-status-active {
+  background-color: #dcfce7;
+  color: #15803d;
+  font-weight: 600;
+  padding: 0.35em 0.75em;
+  border-radius: 20px;
+}
+
+.badge-status-inactive {
+  background-color: #f1f5f9;
+  color: #64748b;
+  font-weight: 600;
+  padding: 0.35em 0.75em;
+  border-radius: 20px;
+}
+
+/* Notification Banner */
+.alert-dismissible {
+  border-radius: 10px;
+}
+
+/* =======================================================================
+   Client Master table — colored header that stands out from the page bg
+   ======================================================================= */
+.table.client-table thead th {
+  background: #2563eb;
+  color: #ffffff;
+  border-bottom: none;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.85rem 0.75rem;
+}
+
+/* Follow the card's rounded corners at the two ends */
+.table.client-table thead th:first-child {
+  border-top-left-radius: 12px;
+}
+
+.table.client-table thead th:last-child {
+  border-top-right-radius: 12px;
+}
+
+/* =======================================================================
+   Client Master — redesigned registration form (sections 01–04)
+   ======================================================================= */
+
+/* Fullscreen-capable modal on desktop: ~97vw wide, viewport-locked
+   height, header/footer pinned, long body scrolls internally. */
+.client-form-backdrop {
+  background: rgba(15, 23, 42, 0.55);
+}
+
+.client-form-dialog {
+  width: min(1400px, 97vw);
+  max-width: min(1400px, 97vw);
+  height: calc(100vh - 2rem);
+  margin: 1rem auto;
+}
+
+.client-form-dialog .modal-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* body scrollbar owns the overflow, not the frame */
+  border-radius: 16px;
+  border: none;
+  box-shadow: 0 25px 60px -12px rgba(15, 23, 42, 0.35);
+}
+
+/* The <form> wraps body + footer, so IT is the real flex child between
+   .modal-content and .modal-body — it must be a flex column itself or
+   the body's overflow never constrains and the modal can't scroll. */
+.client-form-dialog .modal-content form {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.client-form-dialog .modal-body {
+  flex: 1 1 auto;
+  min-height: 0; /* let the flex child shrink so overflow-y actually kicks in */
+  padding: 1.5rem 2rem;
+  background-color: #f8fafc;
+  overflow-y: auto;
+}
+
+.client-form-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 1.25rem 2rem;
+  border-bottom: 1px solid #e2e8f0;
+  background: #ffffff;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  flex-shrink: 0; /* keep pinned: never squeezed by the flex column */
+}
+
+.client-form-title {
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  margin-bottom: 0.15rem;
+}
+
+.client-form-subtitle {
+  color: #94a3b8;
+  font-size: 0.85rem;
+}
+
+.client-form-body .client-section {
+  margin-bottom: 1.5rem;
+}
+
+.client-form-body .client-section:last-child {
+  margin-bottom: 0.25rem;
+}
+
+/* Section header: colored band + icon chip + big faded number */
+.client-section-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.85rem 5.5rem 0.85rem 1rem;
+  border-radius: 12px;
+  margin-bottom: 1.25rem;
+  background-color: var(--cs-bg, #eef2ff);
+}
+
+.client-section-header .cs-chip {
+  flex: 0 0 auto;
+  width: 42px;
+  height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: var(--cs-chip, #ffffff);
+  color: var(--cs-fg, #4f46e5);
+  font-size: 1.15rem;
+}
+
+.client-section-header .cs-title {
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--cs-fg, #4f46e5);
+}
+
+.client-section-header .cs-subtitle {
+  color: #94a3b8;
+  font-size: 0.8rem;
+}
+
+.client-section-header .cs-number {
+  position: absolute;
+  right: 1.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.9rem;
+  font-weight: 700;
+  letter-spacing: -1px;
+  color: var(--cs-fg, #4f46e5);
+  opacity: 0.28;
+}
+
+/* Section color themes (matches the reference design) */
+.client-section-header.cs-blue {
+  --cs-bg: #e9f1fd;
+  --cs-chip: #ffffff;
+  --cs-fg: #3f6fae;
+}
+
+.client-section-header.cs-green {
+  --cs-bg: #e8f7ee;
+  --cs-chip: #ffffff;
+  --cs-fg: #2e7d4f;
+}
+
+.client-section-header.cs-amber {
+  --cs-bg: #fdf3e3;
+  --cs-chip: #ffffff;
+  --cs-fg: #b0791c;
+}
+
+.client-section-header.cs-violet {
+  --cs-bg: #f3eefe;
+  --cs-chip: #ffffff;
+  --cs-fg: #6d4fc4;
+}
+
+.client-section-header.cs-teal {
+  --cs-bg: #e6f6f7;
+  --cs-chip: #ffffff;
+  --cs-fg: #0f766e;
+}
+
+.client-section-header.cs-rose {
+  --cs-bg: #fdeef3;
+  --cs-chip: #ffffff;
+  --cs-fg: #be185d;
+}
+
+/* Logo preview square inside section 01 */
+.client-logo-preview {
+  width: 64px;
+  height: 64px;
+  border-radius: 10px;
+  border: 1px dashed #cbd5e1;
+  background: #f8fafc;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  color: #cbd5e1;
+  font-size: 1.4rem;
+  flex: 0 0 auto;
+}
+
+.client-logo-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.client-logo-hint {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  margin-top: 0.25rem;
+}
+
+/* Small logo shown next to the client name in the list */
+.client-logo-thumb {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  object-fit: contain;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  vertical-align: middle;
+}
+
+/* Neutral placeholder shown when a client has no logo yet */
+.client-logo-thumb-placeholder {
+  border-radius: 6px;
+  background: #eef2f7;
+  border: 1px solid #e2e8f0;
+  color: #94a3b8;
+  font-size: 0.85rem;
+}
+
+/* Logo slot in the detail modal — always rendered, fixed size */
+.client-detail-logo-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+/* Larger logo in the detail modal */
+.client-logo-detail {
+  width: 160px;
+  height: 100px;
+  object-fit: contain;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  border-radius: 10px;
+  padding: 0.5rem;
+}
+
+.client-logo-detail.client-logo-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  border-style: dashed;
+  color: #94a3b8;
+  font-size: 1.6rem;
+}
+
+.client-logo-detail.client-logo-empty span {
+  font-size: 0.78rem;
+}
+
+/* Square profile photo slot in the employee detail modal */
+.employee-photo-detail {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  border-radius: 10px;
+}
+
+.employee-photo-detail.employee-photo-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  border-style: dashed;
+  color: #94a3b8;
+  font-size: 2rem;
+}
+
+.employee-photo-detail.employee-photo-empty span {
+  font-size: 0.78rem;
+}
+
+/* --------------------------------------------------------------- */
+/* Client detail (view) modal — blue header band + info blocks     */
+/* --------------------------------------------------------------- */
+/* Higher specificity so bootstrap's .modal-dialog { width: auto }
+   can never collapse the dialog; wide but never over-viewport. */
+.modal-dialog.client-detail-dialog {
+  width: min(1120px, calc(100vw - 2rem));
+  max-width: calc(100vw - 2rem);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.client-detail-content {
+  border: none;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 24px 64px rgba(15, 23, 42, 0.22);
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 3rem);
+}
+
+/* Colored (blue) header for the client detail modal */
+.client-detail-content .client-form-header {
+  background: #2563eb;
+  border-bottom: none;
+  flex: none;
+}
+
+.client-detail-content .client-form-header .client-form-title {
+  color: #fff;
+}
+
+.client-detail-content .client-form-header .btn-close {
+  filter: invert(1) grayscale(1) brightness(1.6);
+  opacity: 0.85;
+}
+
+.client-detail-content .client-form-header .btn-close:hover {
+  opacity: 1;
+}
+
+/* Identity banner inside the detail body */
+.client-identity-banner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: #eef4ff;
+  border: 1px solid #d8e4fd;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+}
+
+.client-identity-banner + .client-detail-block {
+  margin-top: 1rem;
+}
+
+.client-identity-logo {
+  width: 64px;
+  height: 64px;
+  flex: none;
+  background: #fff;
+  border: 1px solid #e6eaf1;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+}
+
+.client-identity-logo img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.client-identity-logo.round {
+  border-radius: 999px;
+  padding: 4px;
+}
+
+.client-identity-logo i {
+  font-size: 1.6rem;
+  color: #94a3b8;
+}
+
+/* Centered profile head (employee detail) — avatar, name + status, code */
+.employee-profile-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0 0.75rem;
+}
+
+.employee-profile-avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid #e6eaf1;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  overflow: hidden;
+}
+
+.employee-profile-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 999px;
+}
+
+.employee-profile-avatar i {
+  font-size: 2.6rem;
+  color: #94a3b8;
+}
+
+.employee-profile-name-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.employee-profile-name {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #1f2937;
+  line-height: 1.2;
+}
+
+.client-identity-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1f2937;
+  line-height: 1.25;
+}
+
+.min-width-0 {
+  min-width: 0;
+}
+
+.client-detail-body {
+  overflow-y: auto;
+  padding: 1.25rem;
+  background: #f6f8fb;
+}
+
+.client-detail-block {
+  background: #fff;
+  border: 1px solid #e6eaf1;
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+}
+
+.client-detail-block + .client-detail-block {
+  margin-top: 1rem;
+}
+
+.client-detail-block-title {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #334155;
+  margin-bottom: 0.9rem;
+}
+
+.detail-chip {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  flex: none;
+}
+
+.detail-chip.blue {
+  background: #e8effe;
+  color: #2563eb;
+}
+
+.detail-chip.green {
+  background: #e9f7ee;
+  color: #15803d;
+}
+
+.detail-chip.amber {
+  background: #fdf3e3;
+  color: #b45309;
+}
+
+.detail-chip.violet {
+  background: #f3eefe;
+  color: #6d4fc4;
+}
+
+.detail-chip.teal {
+  background: #e6f6f7;
+  color: #0f766e;
+}
+
+.detail-chip.rose {
+  background: #fdeef3;
+  color: #be185d;
+}
+
+.detail-chip.slate {
+  background: #eef2f7;
+  color: #475569;
+}
+
+.client-detail-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #98a2b3;
+  margin-bottom: 0.1rem;
+}
+
+.client-detail-value {
+  font-size: 0.93rem;
+  color: #1f2937;
+  word-break: break-word;
+}
+
+.client-login-row + .client-login-row {
+  margin-top: 0.5rem;
+}
+
+/* Sticky form footer */
+.client-form-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  border-top: 1px solid #e2e8f0;
+  background: #ffffff;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+  flex-shrink: 0; /* keep pinned: never squeezed by the flex column */
+}
+
+@media (max-width: 767.98px) {
+  .client-form-dialog {
+    width: 100vw;
+    max-width: 100vw;
+    height: 100vh;
+    margin: 0;
+  }
+
+  .client-form-dialog .modal-content {
+    height: 100vh;
+    border-radius: 0;
+  }
+
+  .client-form-dialog .modal-body {
+    padding: 1rem;
+  }
+
+  .client-form-header, .client-form-footer {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
