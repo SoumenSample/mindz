@@ -164,19 +164,17 @@ const FieldWorkflow = ({ job, onChanged }) => {
   const handleReach = async () => {
     setBusy("reach");
     setError("");
-    let gps;
+    // GPS is best-effort (geofence bypassed for now): a failed fix must
+    // not block the reach — coordinates are simply omitted from the call.
+    let gps = null;
     try {
       gps = await getCurrentGps();
     } catch (err) {
-      setError(err.message || "GPS unavailable.");
-      setBusy(null);
-      return;
+      gps = null;
     }
     try {
       const out = await VisitService.reachStore(job.id, {
-        latitude: gps.latitude,
-        longitude: gps.longitude,
-        accuracy: gps.accuracy,
+        ...(gps ? { latitude: gps.latitude, longitude: gps.longitude, accuracy: gps.accuracy } : {}),
         device_info: navigator.userAgent.slice(0, 100)
       });
       const d = out.data?.reach_distance;

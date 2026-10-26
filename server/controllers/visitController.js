@@ -15,7 +15,7 @@
 const db = require("../config/db");
 const Visit = require("../models/visitModel");
 const { hasPermission } = require("../services/rbacService");
-const { STORE_REACH_RADIUS_METERS, haversineMeters } = require("../utils/geo");
+const { haversineMeters } = require("../utils/geo");
 
 function isDuplicateEntry(err) {
   return err && err.code === "ER_DUP_ENTRY";
@@ -233,34 +233,33 @@ exports.reachStore = async (req, res) => {
       });
     }
 
+    // TEMPORARY (per request): the geofence comparison is bypassed.
+    // Clicking Reach Store now ALWAYS records the reach — no check that
+    // the employee coordinates match the store coordinates. GPS is still
+    // captured best-effort for the record (job_reach_records allows
+    // NULL coordinates).
+    // To restore the gate: require valid GPS, reject when the store has
+    // no reference GPS (STORE_GPS_MISSING), compute haversine distance
+    // and reject with OUTSIDE_REACH_RADIUS when distance exceeds
+    // STORE_REACH_RADIUS_METERS (see git history of this block).
     const { latitude, longitude, accuracy, device_info } = req.body || {};
-    const gps = validateGps(latitude, longitude, accuracy);
-    if (gps.errors.length > 0) {
-      conn.release();
-      return res.status(400).json({ success: false, message: gps.errors.join(" "), errors: gps.errors });
+    let gps = { lat: null, lng: null, accuracy: null };
+    const coordsProvided =
+      latitude !== undefined && latitude !== null && String(latitude).trim() !== "" &&
+      longitude !== undefined && longitude !== null && String(longitude).trim() !== "";
+    if (coordsProvided) {
+      const v = validateGps(latitude, longitude, accuracy);
+      if (v.errors.length > 0) {
+        conn.release();
+        return res.status(400).json({ success: false, message: v.errors.join(" "), errors: v.errors });
+      }
+      gps = v;
     }
-    if (job.store_lat === null || job.store_lng === null) {
-      conn.release();
-      return res.status(409).json({
-        success: false,
-        message: "Store has no reference GPS. Ask the office to update the store location first.",
-        code: "STORE_GPS_MISSING"
-      });
-    }
-    const distance = haversineMeters(job.store_lat, job.store_lng, gps.lat, gps.lng);
-    if (distance === null) {
-      conn.release();
-      return res.status(500).json({ success: false, message: "Server error while evaluating location." });
-    }
-    if (distance > STORE_REACH_RADIUS_METERS) {
-      conn.release();
-      return res.status(409).json({
-        success: false,
-        message: "Employee is outside the allowed store reach radius.",
-        code: "OUTSIDE_REACH_RADIUS",
-        data: { distance_meters: distance, radius_meters: STORE_REACH_RADIUS_METERS }
-      });
-    }
+    // Informational only — recorded, never rejected on.
+    const distance =
+      gps.lat !== null && gps.lng !== null && job.store_lat !== null && job.store_lng !== null
+        ? haversineMeters(job.store_lat, job.store_lng, gps.lat, gps.lng)
+        : null;
 
     await conn.beginTransaction();
     const open = await Visit.getOpenForAssignment(Number(id), mine.assignment_id, conn);
@@ -278,11 +277,11 @@ exports.reachStore = async (req, res) => {
     }, conn);
     await Visit.setStatus(open.id, "REACHED", conn);
     await conn.query("UPDATE jobs SET status = 'REACHED', updated_by = ? WHERE id = ? AND status = 'EN_ROUTE'", [req.user.id, Number(id)]);
-    await history(conn, { jobId: Number(id), from: "EN_ROUTE", to: "REACHED", by: req.user.id, remark: `Store reached (visit ${open.visit_number}, ${distance}m)` });
+    await history(conn, { jobId: Number(id), from: "EN_ROUTE", to: "REACHED", by: req.user.id, remark: `Store reached (visit ${open.visit_number}${distance !== null ? `, ${distance}m` : ""})` });
     await audit(req, conn, { action: "JOB_STORE_REACHED", entityType: "JOB", entityId: Number(id), oldValues: { status: "EN_ROUTE" }, newValues: { status: "REACHED", distance_meters: distance } });
     await audit(req, conn, { action: "VISIT_REACHED", entityType: "VISIT", entityId: open.id, oldValues: { status: "OPEN" }, newValues: { status: "REACHED" } });
     await notifyAdmins(conn, `Store reached: ${job.job_number}`,
-      `${mine.employee_code} reached ${job.store_name} (${distance}m from reference).`, Number(id), "JOB_REACHED");
+      `${mine.employee_code} reached ${job.store_name}${distance !== null ? ` (${distance}m from reference)` : ""}.`, Number(id), "JOB_REACHED");
     await conn.commit();
     conn.release();
 
